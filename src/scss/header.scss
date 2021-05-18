@@ -1,0 +1,8 @@
+.navbar-link {
+  &:hover{
+    text-decoration: none;
+  }
+  &.active{
+    font-weight: bold;
+  }
+}
