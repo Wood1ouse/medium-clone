@@ -1,19 +1,25 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {BrowserRouter as Router} from "react-router-dom";
-import './scss/index.scss'
-import Header from "./components/header/Header";
+import {CurrentUserProvider} from "./contexts/currentUser";
+import CurrentUserChecker from "./components/CurrentUserChecker";
+import Header from "./components/Header";
 import Routes from "./routes";
+import './scss/index.scss'
 
 
 const App = () => {
     return (
-        <div>
-            <Router>
-                <Header/>
-                <Routes/>
-            </Router>
-        </div>
+        <CurrentUserProvider>
+            <CurrentUserChecker>
+                <div>
+                    <Router>
+                        <Header/>
+                        <Routes/>
+                    </Router>
+                </div>
+            </CurrentUserChecker>
+        </CurrentUserProvider>
     )
 }
 

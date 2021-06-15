@@ -1,8 +1,10 @@
-.navbar-link {
-  &:hover{
+a:-webkit-any-link {
+  color: #5cb85c;
+  &:hover, &.active{
+    font-weight: bold;
+    cursor: pointer;
     text-decoration: none;
   }
-  &.active{
-    font-weight: bold;
-  }
+
 }
+
