@@ -1,9 +1,9 @@
-import BackendErrorMessages from "../../components/BackendErrorMessages";
-import useLocalStorage from "../../hooks/useLocalStorage";
-import useFetch from "../../hooks/useFetch";
 import {useEffect, useState, useContext} from "react";
+import BackendErrorMessages from "../components/BackendErrorMessages";
+import useLocalStorage from "../hooks/useLocalStorage";
+import useFetch from "../hooks/useFetch";
 import {Link, Redirect} from "react-router-dom";
-import {CurrentUserContext} from "../../contexts/currentUser";
+import {CurrentUserContext} from "../contexts/currentUser";
 
 const Auth = (props) => {
     const isLogin = props.match.path === '/login'

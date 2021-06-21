@@ -4,7 +4,6 @@ import {CurrentUserContext} from "../contexts/currentUser";
 
 const Header = () => {
     const [currentUserState] = useContext(CurrentUserContext)
-    console.log(currentUserState);
     return (
         <nav className="navbar navbar-light">
             <div className="container">
