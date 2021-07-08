@@ -1,35 +1,36 @@
-import {Link} from "react-router-dom";
-import classNames from "classnames";
-import {range} from '../utils'
+import { Link } from 'react-router-dom'
+import classNames from 'classnames'
+import { range } from '../utils'
 
-
-const PaginationItem = ({page, currentPage, url}) => {
+const PaginationItem = ({ page, currentPage, url }) => {
     const liClassNames = classNames({
         'page-item': true,
-        'active': currentPage === page
+        active: currentPage === page,
     })
     return (
         <li className={liClassNames}>
-            <Link to={`${url}?page=${page}`} className = 'page-link'>
+            <Link to={`${url}?page=${page}`} className="page-link">
                 {page}
             </Link>
         </li>
     )
 }
 
-const Pagination = ({total, limit, url, currentPage}) => {
+const Pagination = ({ total, limit, url, currentPage }) => {
     const pagesCount = Math.ceil(total / limit)
     const pages = range(1, pagesCount)
-    return <ul className='pagination'>
-        {pages.map(page => (
-            <PaginationItem
-                page={page}
-                currentPage={currentPage}
-                url={url}
-                key={page}/>
-        ))}
-    </ul>
+    return (
+        <ul className="pagination">
+            {pages.map((page) => (
+                <PaginationItem
+                    page={page}
+                    currentPage={currentPage}
+                    url={url}
+                    key={page}
+                />
+            ))}
+        </ul>
+    )
 }
-
 
 export default Pagination

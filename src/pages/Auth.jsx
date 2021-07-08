@@ -1,9 +1,9 @@
-import {useEffect, useState, useContext} from "react";
-import BackendErrorMessages from "../components/BackendErrorMessages";
-import useLocalStorage from "../hooks/useLocalStorage";
-import useFetch from "../hooks/useFetch";
-import {Link, Redirect} from "react-router-dom";
-import {CurrentUserContext} from "../contexts/currentUser";
+import { useEffect, useState, useContext } from 'react'
+import BackendErrorMessages from '../components/BackendErrorMessages'
+import useLocalStorage from '../hooks/useLocalStorage'
+import useFetch from '../hooks/useFetch'
+import { Link, Redirect } from 'react-router-dom'
+import { CurrentUserContext } from '../contexts/currentUser'
 
 const Auth = (props) => {
     const isLogin = props.match.path === '/login'
@@ -15,23 +15,24 @@ const Auth = (props) => {
     const [password, setPassword] = useState('')
     const [username, setUserName] = useState('')
     const [isSuccessfulSubmit, setIsSuccessfulSubmit] = useState(false)
-    const [{response, isLoading, error}, doFetch] = useFetch(apiUrl)
+    const [{ response, isLoading, error }, doFetch] = useFetch(apiUrl)
     const [, setToken] = useLocalStorage('token')
-    const [currentUserState, setCurrentUserState] = useContext(CurrentUserContext)
+    const [currentUserState, dispatch] = useContext(CurrentUserContext)
 
-
+    console.log('Current User State: ', currentUserState)
 
     const handleSubmit = (e) => {
         e.preventDefault()
-        const user = isLogin ? {email, password} : {email, password, username}
+        const user = isLogin
+            ? { email, password }
+            : { email, password, username }
         doFetch({
             method: 'post',
             data: {
-                user
-            }
+                user,
+            },
         })
     }
-
 
     useEffect(() => {
         if (!response) {
@@ -39,60 +40,76 @@ const Auth = (props) => {
         }
         setToken(response.user.token)
         setIsSuccessfulSubmit(true)
-        setCurrentUserState((state) => ({
-            ...state,
-            isLoggedIn: true,
-            isLoading: false,
-            currentUser: response.user
-
-        }))
-    }, [response, setToken, setCurrentUserState, currentUserState])
+        dispatch({ type: 'SET_AUTHORIZED', payload: response.user })
+    }, [response, setToken, currentUserState, dispatch])
 
     if (isSuccessfulSubmit) {
-        return <Redirect to='/'/>
+        return <Redirect to="/" />
     }
 
     return (
-        <div className='auth-page'>
+        <div className="auth-page">
             <div className="container page">
                 <div className="row">
                     <div className="col-md-6 offset-md-3 col-xs-12">
-                        <div className="text-xs-center" style={{fontSize: "30px", fontWeight: "bold"}}>{pageTitle}</div>
+                        <div
+                            className="text-xs-center"
+                            style={{ fontSize: '30px', fontWeight: 'bold' }}
+                        >
+                            {pageTitle}
+                        </div>
                         <p className="text-xs-center">
                             <Link to={descriptionLink}>{descriptionText}</Link>
                         </p>
                         <form onSubmit={handleSubmit}>
-                            {error && <BackendErrorMessages backendErrors={error.errors}/>}
+                            {error && (
+                                <BackendErrorMessages
+                                    backendErrors={error.errors}
+                                />
+                            )}
                             <fieldset>
-                                {!isLogin && <fieldset className='form-group'>
-                                    <input type="text"
-                                           className='form-control form-control-lg ng-pristine ng-untouched ng-valid ng-empty ng-valid-email'
-                                           placeholder='Username'
-                                           value={username}
-                                           onChange={e => setUserName(e.target.value)}
+                                {!isLogin && (
+                                    <fieldset className="form-group">
+                                        <input
+                                            type="text"
+                                            className="form-control form-control-lg ng-pristine ng-untouched ng-valid ng-empty ng-valid-email"
+                                            placeholder="Username"
+                                            value={username}
+                                            onChange={(e) =>
+                                                setUserName(e.target.value)
+                                            }
+                                        />
+                                    </fieldset>
+                                )}
+                                <fieldset className="form-group">
+                                    <input
+                                        type="email"
+                                        className="form-control form-control-lg ng-pristine ng-untouched ng-valid ng-empty ng-valid-email"
+                                        placeholder="Email"
+                                        value={email}
+                                        onChange={(e) =>
+                                            setEmail(e.target.value)
+                                        }
                                     />
                                 </fieldset>
-                                }
-                                <fieldset className='form-group'>
-                                    <input type="email"
-                                           className='form-control form-control-lg ng-pristine ng-untouched ng-valid ng-empty ng-valid-email'
-                                           placeholder='Email'
-                                           value={email}
-                                           onChange={e => setEmail(e.target.value)}
+                                <fieldset className="form-group">
+                                    <input
+                                        type="password"
+                                        className="form-control form-control-lg ng-pristine ng-untouched ng-valid ng-empty ng-valid-email"
+                                        placeholder="Password"
+                                        value={password}
+                                        onChange={(e) => {
+                                            setPassword(e.target.value)
+                                        }}
                                     />
                                 </fieldset>
-                                <fieldset className='form-group'>
-                                    <input type="password"
-                                           className='form-control form-control-lg ng-pristine ng-untouched ng-valid ng-empty ng-valid-email'
-                                           placeholder='Password'
-                                           value={password}
-                                           onChange={e => {
-                                               setPassword(e.target.value)
-                                           }}
-                                    />
-                                </fieldset>
-                                <button className='btn btn-lg btn-primary pull-xs-right' type="submit"
-                                        disabled={isLoading}>{pageTitle}</button>
+                                <button
+                                    className="btn btn-lg btn-primary pull-xs-right"
+                                    type="submit"
+                                    disabled={isLoading}
+                                >
+                                    {pageTitle}
+                                </button>
                             </fieldset>
                         </form>
                     </div>
