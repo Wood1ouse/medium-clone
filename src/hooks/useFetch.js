@@ -9,6 +9,8 @@ const useFetch = url => {
     const [error, setError] = useState(null)
     const [options, setOptions] = useState({})
     const [token] = useLocalStorage('token')
+    let skipGetResponseAfterDestroy = false
+
 
     const doFetch = useCallback((options = {}) => {
         setOptions(options)
@@ -30,12 +32,21 @@ const useFetch = url => {
 
         axios(baseUrl + url, requestOptions)
             .then(res => {
-                setIsLoading(false)
-                setResponse(res.data)
+                if (!skipGetResponseAfterDestroy) {
+                    setIsLoading(false)
+                    setResponse(res.data)
+                }
             }).catch(err => {
-            setIsLoading(false)
-            setError(err.response.data)
+                if (!skipGetResponseAfterDestroy) {
+                    setIsLoading(false)
+                    setError(err.response.data)           
+                }
         })
+
+        return () => {
+            skipGetResponseAfterDestroy = true
+        }
+
     }, [isLoading, options, token, url])
 
     return [{isLoading, response, error}, doFetch]

@@ -1,4 +1,5 @@
 import TagList from '../components/TagList'
+import AddToFavorites from './AddToFavorites'
 import { Link } from 'react-router-dom'
 
 const Feed = ({ articles }) => {
@@ -11,19 +12,20 @@ const Feed = ({ articles }) => {
                             <img src={article.author.image} alt="" />
                         </Link>
                         <div className="info">
-                            <Link
-                                to={`/profiles/${article.author.username}`}
-                                className="author"
-                            >
+                            <Link to={`/profiles/${article.author.username}`} className="author">
                                 {article.author.username}
                             </Link>
                             <span className="date">{article.createdAt}</span>
                         </div>
+                        <div className="pull-xs-right">
+                            <AddToFavorites
+                                isFavorited={article.favorited}
+                                favoritesCount={article.favoritesCount}
+                                articleSlug={article.slug}
+                            />
+                        </div>
                     </div>
-                    <Link
-                        to={`/articles/${article.slug}`}
-                        className="preview-link"
-                    >
+                    <Link to={`/articles/${article.slug}`} className="preview-link">
                         <h1>{article.title}</h1>
                         <p>{article.title}</p>
                         <span>Read More...</span>
